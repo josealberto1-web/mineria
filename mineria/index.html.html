@@ -1,0 +1,178 @@
+﻿<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mineria Ilegal en la Amazonia del Perú</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #2e7d32;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+            background: white;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .student-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .student-info img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        h2 {
+            color: #2e7d32;
+        }
+        .media {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .media img {
+            max-width: 300px;
+            height: auto;
+            border-radius: 8px;
+        }
+        .media video {
+            max-width: 500px;
+            height: auto;
+            border-radius: 8px;
+        }
+        footer {
+            text-align: center;
+            padding: 1em 0;
+            background-color: #2e7d32;
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Mineria Ilegal en la Amazonia del Perú</h1>
+    </header>
+    <div class="container">
+        <div class="student-info">
+            <img src="jose_basurto.jpg" alt="Foto del autor">
+            <p><strong>Autor:</strong> José Alberto Basurto Mamani</p>
+            <p><strong>NRC:</strong> Nº 36371</p>
+        </div>
+        
+        <h2>Principales Causas de la Minería Ilegal</h2>
+        <p>La minería ilegal en la Amazonia peruana surge por una combinación de factores socioeconómicos, políticos y ambientales, entre los que destacan:</p>
+        <ul>
+            <li><strong>Pobreza y falta de oportunidades:</strong> Muchas comunidades locales recurren a la minería ilegal como fuente de ingresos debido a la escasez de empleo formal.</li>
+            <li><strong>Altos precios del oro:</strong> La demanda global de oro incentiva la extracción ilegal, ya que es una actividad lucrativa.</li>
+            <li><strong>Debilidad institucional:</strong> La falta de fiscalización efectiva y corrupción en las autoridades locales permiten que estas actividades prosperen.</li>
+            <li><strong>Acceso a tierras no reguladas:</strong> Zonas remotas de la Amazonia son vulnerables debido a la falta de control estatal.</li>
+        </ul>
+
+        <h2>Impacto en el Medio Ambiente</h2>
+        <p>La minería ilegal tiene efectos devastadores en el ecosistema amazónico:</p>
+        <ul>
+            <li><strong>Deforestación:</strong> Se talan miles de hectáreas de bosque para abrir minas, destruyendo hábitats de flora y fauna.</li>
+            <li><strong>Contaminación por mercurio:</strong> El uso de mercurio para extraer oro contamina ríos, afectando la vida acuática y la salud humana.</li>
+            <li><strong>Pérdida de biodiversidad:</strong> Especies endémicas están en riesgo de extinción debido a la alteración de sus hábitats.</li>
+            <li><strong>Alteración del suelo:</strong> La remoción de tierra deja suelos infértiles, dificultando la regeneración natural.</li>
+        </ul>
+        <div class="media">
+            <img src="Deforestación por minería ilegal.jpg" alt="Deforestación por minería ilegal">
+            <img src="Río del amazonas contaminado por mercurio.jpg" alt="Río contaminado por mercurio">
+        </div>
+
+        <h2>Importancia de Conocer esta Problemática</h2>
+        <p>Entender la minería ilegal en la Amazonia es crucial por las siguientes razones:</p>
+        <ul>
+            <li><strong>Preservación del ecosistema:</strong> La Amazonia es un pulmón del planeta, y su conservación es vital para mitigar el cambio climático.</li>
+            <li><strong>Salud pública:</strong> La contaminación por mercurio afecta a comunidades indígenas y locales, causando problemas de salud graves.</li>
+            <li><strong>Conciencia global:</strong> Informar sobre esta problemática fomenta la presión internacional para tomar medidas efectivas.</li>
+            <li><strong>Desarrollo sostenible:</strong> Conocer el problema ayuda a promover alternativas económicas que no dañen el medio ambiente.</li>
+        </ul>
+        <div class="media">
+            <video controls>
+                <source src="ineria.mp4" type="video/mp4">
+                Tu navegador no soporta el elemento de video.
+            </video>
+        </div>
+
+        <h2>Propuestas de Solución</h2>
+        <p>Para combatir la minería ilegal, se proponen las siguientes medidas:</p>
+        <ul>
+            <li><strong>Fortalecer la fiscalización:</strong> Aumentar la presencia estatal en zonas críticas y sancionar a los responsables.</li>
+            <li><strong>Promover alternativas económicas:</strong> Desarrollar proyectos de agricultura sostenible, ecoturismo y reforestación para las comunidades.</li>
+            <li><strong>Educación y sensibilización:</strong> Implementar campañas para informar sobre los impactos de la minería ilegal.</li>
+            <li><strong>Cooperación internacional:</strong> Trabajar con organizaciones globales para financiar programas de conservación y monitoreo.</li>
+        </ul>
+        <div class="media">
+              <video controls>
+                <source src="videoplayback.mp4" type="video/mp4">
+                Tu navegador no soporta el elemento de video.
+            </video>
+        </div>
+    </div>
+    <footer>
+        <p>© Producto Academico 2 - Herramientas Virtuales para el Aprendizaje.</p>
+    </footer>
+</body>
+</html>
